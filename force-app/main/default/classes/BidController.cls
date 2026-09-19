@@ -35,7 +35,7 @@ public with sharing class BidController {
                 ? listing.Current_Bid__c
                 : listing.Starting_Price__c;
 
-            if (amount >= threshold) {
+            if (amount <= threshold) {
                 throw new AuraHandledException(
                     'Bid must be greater than the current bid of ' + threshold
                 );
