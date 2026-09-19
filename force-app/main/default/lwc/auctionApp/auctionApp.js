@@ -10,7 +10,6 @@ export default class AuctionApp extends LightningElement {
     searchTerm = '';
     selectedCategory = '';
 
-    searchDebounceTimeout;
     requestSequence = 0;
 
     categoryOptions = [
@@ -23,10 +22,6 @@ export default class AuctionApp extends LightningElement {
 
     connectedCallback() {
         this.loadListings();
-    }
-
-    disconnectedCallback() {
-        clearTimeout(this.searchDebounceTimeout);
     }
 
     loadListings() {
@@ -54,18 +49,11 @@ export default class AuctionApp extends LightningElement {
 
     handleSearchChange(event) {
         this.searchTerm = event.target.value;
-
-        clearTimeout(this.searchDebounceTimeout);
-
-        this.searchDebounceTimeout = setTimeout(() => {
-            this.loadListings();
-        }, 300);
+        this.loadListings();
     }
 
     handleCategoryChange(event) {
         this.selectedCategory = event.detail.value;
-
-        clearTimeout(this.searchDebounceTimeout);
         this.loadListings();
     }
 

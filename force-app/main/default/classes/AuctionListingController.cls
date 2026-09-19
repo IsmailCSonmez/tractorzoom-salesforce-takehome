@@ -130,6 +130,18 @@ public with sharing class AuctionListingController {
             ? null
             : searchTerm.trim();
 
+        /*
+         * Do not run a text search for a single character.
+         * Treat it like no search term until at least two
+         * characters have been entered.
+         */
+        if (
+            normalizedSearch != null &&
+            normalizedSearch.length() < 2
+        ) {
+            normalizedSearch = null;
+        }
+
         String categoryFilter = String.isBlank(category)
             ? null
             : category;
@@ -179,9 +191,9 @@ public with sharing class AuctionListingController {
          * Description__c is a Long Text Area, so it cannot be
          * filtered in a SOQL WHERE clause.
          *
-         * SOSL is used to find candidate records.
-         * The wildcard supports partial searches such as:
-         * "cor" -> "corn"
+         * SOSL finds candidate records.
+         * The wildcard allows prefix searches such as:
+         * "cor" -> "corn".
          */
         String soslSearch = normalizedSearch + '*';
 
@@ -230,9 +242,9 @@ public with sharing class AuctionListingController {
             (List<Auction_Listing__c>) searchResults[0];
 
         /*
-         * SOSL searches all searchable fields.
+         * SOSL searches across searchable fields.
          * The UI requirement is specifically title OR description,
-         * so verify candidates against those fields.
+         * so validate the candidates against those fields.
          */
         String searchValue = normalizedSearch.toLowerCase();
 
