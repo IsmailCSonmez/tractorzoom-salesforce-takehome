@@ -22,7 +22,35 @@
     padding-top: 1rem;
 }
 
-.category-tractor { background-color: #e8f5e9; color: #1b5e20; }
-.category-combine { background-color: #e3f2fd; color: #0d47a1; }
-.category-implement { background-color: #fff3e0; color: #e65100; }
-.category-attachment { background-color: #f3e5f5; color: #4a148c; }
+.bid-row {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #dddbda;
+    border-radius: 4px;
+    background: #ffffff;
+}
+
+.highest-bid {
+    border-left: 4px solid #2e7d32;
+    background: #f3f8f3;
+}
+
+.category-tractor {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+.category-combine {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+}
+
+.category-implement {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.category-attachment {
+    background-color: #f3e5f5;
+    color: #4a148c;
+}

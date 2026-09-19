@@ -1,47 +1,129 @@
 <template>
     <template if:true={isLoading}>
-        <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+        <lightning-spinner alternative-text="Loading..." size="medium">
+        </lightning-spinner>
     </template>
+
     <template if:true={listing}>
         <lightning-card>
             <div class="slds-p-around_medium">
+
                 <div class="detail-image slds-m-bottom_medium">
                     <img src={imageUrl} alt={listing.title} onerror={handleImageError} />
                 </div>
+
                 <div class="slds-grid slds-gutters_x-small slds-m-bottom_small">
-                    <span class={categoryBadgeClass}>{listing.category}</span>
-                    <span class={statusBadgeClass}>{listing.status}</span>
+                    <span class={categoryBadgeClass}>
+                        {listing.category}
+                    </span>
+
+                    <span class={statusBadgeClass}>
+                        {listing.status}
+                    </span>
                 </div>
-                <h1 class="slds-text-heading_large slds-m-bottom_small">{listing.title}</h1>
-                <p class="slds-text-body_regular slds-m-bottom_medium">{listing.description}</p>
+
+                <h1 class="slds-text-heading_large slds-m-bottom_small">
+                    {listing.title}
+                </h1>
+
+                <p class="slds-text-body_regular slds-m-bottom_medium">
+                    {listing.description}
+                </p>
+
                 <div class="price-section slds-m-bottom_medium">
                     <div class="slds-grid slds-gutters_small">
+
                         <div class="price-item">
-                            <span class="slds-text-body_small slds-text-color_weak">Starting Price</span>
-                            <div class="slds-text-heading_small">{startingPriceDisplay}</div>
+                            <span class="slds-text-body_small slds-text-color_weak">
+                                Starting Price
+                            </span>
+
+                            <div class="slds-text-heading_small">
+                                {startingPriceDisplay}
+                            </div>
                         </div>
+
                         <div class="price-item">
-                            <span class="slds-text-body_small slds-text-color_weak">Current Bid</span>
-                            <div class="slds-text-heading_medium current-bid">{currentBidDisplay}</div>
+                            <span class="slds-text-body_small slds-text-color_weak">
+                                Current Bid
+                            </span>
+
+                            <div class="slds-text-heading_medium current-bid">
+                                {currentBidDisplay}
+                            </div>
                         </div>
+
                     </div>
+
                     <template if:true={listing.currentBidder}>
                         <p class="slds-text-body_small slds-m-top_x-small">
-                            Leading: <strong>{listing.currentBidder}</strong>
+                            Leading:
+                            <strong>{listing.currentBidder}</strong>
                         </p>
                     </template>
                 </div>
+
                 <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_medium">
                     Ends: {formattedEndsAt}
                 </p>
+
                 <template if:true={isActive}>
-                    <c-bid-form
-                        listing-id={listing.id}
-                        current-bid={listing.currentBid}
-                        starting-price={listing.startingPrice}
-                        onbidsuccess={handleBidSuccess}>
+                    <c-bid-form listing-id={listing.id} current-bid={listing.currentBid}
+                        starting-price={listing.startingPrice} onbidsuccess={handleBidSuccess}>
                     </c-bid-form>
                 </template>
+
+                <div class="slds-m-top_large">
+                    <h2 class="slds-text-heading_small slds-m-bottom_small">
+                        Bid History
+                    </h2>
+
+                    <template if:true={hasBidHistory}>
+                        <div class="bid-history">
+
+                            <template for:each={bidHistory} for:item="bid">
+
+                                <div key={bid.id} class={bid.rowClass}>
+
+                                    <div class="slds-grid slds-grid_align-spread">
+
+                                        <div>
+                                            <div class="slds-text-title_bold">
+                                                {bid.bidderName}
+                                            </div>
+
+                                            <div class="slds-text-body_small slds-text-color_weak">
+                                                {bid.bidTimeDisplay}
+                                            </div>
+                                        </div>
+
+                                        <div class="slds-text-align_right">
+
+                                            <div class="slds-text-heading_small">
+                                                {bid.amountDisplay}
+                                            </div>
+
+                                            <template if:true={bid.isHighest}>
+                                                <span class="slds-badge slds-badge_success">
+                                                    Highest Bid
+                                                </span>
+                                            </template>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </template>
+                        </div>
+                    </template>
+
+                    <template if:false={hasBidHistory}>
+                        <p class="slds-text-body_small slds-text-color_weak">
+                            No bids have been placed yet.
+                        </p>
+                    </template>
+                </div>
+
             </div>
         </lightning-card>
     </template>
