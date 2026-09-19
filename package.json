@@ -7,11 +7,12 @@
         "test": "jest --passWithNoTests",
         "org:create": "sf org create scratch -f config/project-scratch-def.json -a FarmAuction -y 7 -d",
         "org:delete": "sf org delete scratch --target-org FarmAuction --no-prompt",
-        "org:push": "sf project deploy start --manifest package.xml --target-org FarmAuction",
-        "org:forcePush": "sf project deploy start --manifest package.xml --target-org FarmAuction --ignore-conflicts",
+        "org:push": "sf project deploy start --source-dir force-app --target-org FarmAuction",
+        "org:forcePush": "sf project deploy start --source-dir force-app --target-org FarmAuction --ignore-conflicts",
+        "org:assign": "sf org assign permset --name Farm_Auction_User --target-org FarmAuction",
         "org:seed": "sf apex run --file scripts/apex/seedData.apex --target-org FarmAuction",
         "org:open": "sf org open --target-org FarmAuction",
-        "org:setup": "npm run org:create && npm run org:push && npm run org:seed && sf org open --target-org FarmAuction"
+        "org:setup": "npm run org:create && npm run org:push && npm run org:assign && npm run org:seed && sf org open --target-org FarmAuction"
     },
     "devDependencies": {
         "@salesforce/eslint-config-lwc": "^3.5.0",
