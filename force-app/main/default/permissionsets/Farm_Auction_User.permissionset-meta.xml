@@ -61,6 +61,6 @@
     </objectPermissions>
     <tabSettings>
         <tab>Farm_Auction_Tab</tab>
-        <visibility>Available</visibility>
+        <visibility>Visible</visibility>
     </tabSettings>
 </PermissionSet>
