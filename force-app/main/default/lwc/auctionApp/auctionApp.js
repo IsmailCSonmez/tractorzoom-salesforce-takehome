@@ -10,6 +10,9 @@ export default class AuctionApp extends LightningElement {
     searchTerm = '';
     selectedCategory = '';
 
+    searchDebounceTimeout;
+    requestSequence = 0;
+
     categoryOptions = [
         { label: 'All Categories', value: '' },
         { label: 'Tractor', value: 'Tractor' },
@@ -22,26 +25,47 @@ export default class AuctionApp extends LightningElement {
         this.loadListings();
     }
 
+    disconnectedCallback() {
+        clearTimeout(this.searchDebounceTimeout);
+    }
+
     loadListings() {
+        const requestId = ++this.requestSequence;
+
         this.isLoading = true;
-        getListings()
-            .then(result => {
-                this.listings = result.listings;
-                this.isLoading = false;
+
+        getListings({
+            searchTerm: this.searchTerm,
+            category: this.selectedCategory
+        })
+            .then((result) => {
+                if (requestId === this.requestSequence) {
+                    this.listings = result.listings;
+                    this.isLoading = false;
+                }
             })
-            .catch(error => {
-                console.error('Error loading listings:', error);
-                this.isLoading = false;
+            .catch((error) => {
+                if (requestId === this.requestSequence) {
+                    console.error('Error loading listings:', error);
+                    this.isLoading = false;
+                }
             });
     }
 
     handleSearchChange(event) {
-        this.searchTerm = event.detail.value;
-        this.loadListings();
+        this.searchTerm = event.target.value;
+
+        clearTimeout(this.searchDebounceTimeout);
+
+        this.searchDebounceTimeout = setTimeout(() => {
+            this.loadListings();
+        }, 300);
     }
 
     handleCategoryChange(event) {
         this.selectedCategory = event.detail.value;
+
+        clearTimeout(this.searchDebounceTimeout);
         this.loadListings();
     }
 
